@@ -1,21 +1,25 @@
 # babycli
 
-[![Go Reference](https://pkg.go.dev/badge/noxide.lol/go/babycli.svg)](https://pkg.go.dev/noxide.lol/go/babycli)
-[![BSD License](https://img.shields.io/github/license/noxideproject/babycli?color=7C00D8&style=flat-square&label=License)](https://github.com/noxideproject/babycli/blob/main/LICENSE)
-[![Build](https://img.shields.io/github/actions/workflow/status/noxideproject/babycli/ci.yaml?style=flat-square&color=0FAA07&label=CI)](https://github.com/noxideproject/babycli/actions/workflows/ci.yaml)
+[![Go Reference](https://pkg.go.dev/badge/cattlecloud.net/go/babycli.svg)](https://pkg.go.dev/cattlecloud.net/go/babycli)
+[![License](https://img.shields.io/github/license/cattlecloud/babycli?color=7C00D8&style=flat-square&label=License)](https://github.com/cattlecloud/babycli/blob/main/LICENSE)
+[![Build](https://img.shields.io/github/actions/workflow/status/cattlecloud/babycli/ci.yaml?style=flat-square&color=0FAA07&label=Tests)](https://github.com/cattlecloud/babycli/actions/workflows/ci.yaml)
 
 `babycli` is a modern CLI arguments parser for Go.
 
 ### Requirements
 
-The minimum Go version is `go1.22`.
+The minimum Go version is `go1.23`.
 
-### Install
+### Getting Started
 
-Use `go get` to grab the latest version of `babycli`.
+The `babycli` package can be added to a project with `go get`.
 
 ```shell
-go get -u noxide.lol/go/babycli@latest
+go get cattlecloud.net/go/babycli@latest
+```
+
+```go
+import "cattlecloud.net/go/babycli"
 ```
 
 ### Influence
@@ -32,4 +36,4 @@ breaking changes being very likely.
 
 ### License
 
-Open source under the [BSD-3-Clause](LICENSE)
+The `cattlecloud.net/go/babycli` module is open source under the [BSD](LICENSE) license.

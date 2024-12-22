@@ -1,4 +1,4 @@
-// Copyright (c) The Noxide Project Authors
+// Copyright (c) CattleCloud LLC
 // SPDX-License-Identifier: BSD-3-Clause
 
 package babycli
@@ -10,7 +10,7 @@ import (
 	"os"
 	"slices"
 
-	"noxide.lol/go/stacks"
+	"cattlecloud.net/go/stacks"
 )
 
 type Code = int

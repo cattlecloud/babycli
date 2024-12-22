@@ -18,31 +18,18 @@ jobs:
         run: |
           copywrite --config .github/workflows/scripts/copywrite.hcl \
             headers --spdx "BSD-3-Clause" --plan
-  run-lint:
-    timeout-minutes: 5
+  run-tests:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: golangci/golangci-lint-action@v6
-        with:
-          version: v1.60.3
-          args: --config .github/workflows/scripts/golangci.yaml
-  run-tests:
-    timeout-minutes: 5
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-24.04
-          - macos-14
-    runs-on: ${{matrix.os}}
-    steps:
-      - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v2
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
-          cache-dependency-path: '**/go.sum'
+      - name: Show System
+        run: |
+          uname -a
+          just sysinfo
       - name: Run Go Test
         run: |
-          make test
-
+          just init tidy lint test
