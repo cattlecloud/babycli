@@ -1,4 +1,4 @@
-// Copyright (c) The Noxide Project Authors
+// Copyright (c) CattleCloud LLC
 // SPDX-License-Identifier: BSD-3-Clause
 
 package babycli
@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"noxide.lol/go/stacks"
+	"cattlecloud.net/go/stacks"
 )
 
 type Func func(*Component) Code

@@ -1,4 +1,4 @@
-// Copyright (c) The Noxide Project Authors
+// Copyright (c) CattleCloud LLC
 // SPDX-License-Identifier: BSD-3-Clause
 
 package babycli
@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"cattlecloud.net/go/stacks"
 	"github.com/shoenig/test/must"
-	"noxide.lol/go/stacks"
 )
 
 type testCase struct {

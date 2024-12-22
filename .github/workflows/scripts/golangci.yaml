@@ -6,6 +6,7 @@ linters:
    - asciicheck
    - bidichk
    - bodyclose
+   - copyloopvar
    - dogsled
    - dupword
    - durationcheck
@@ -13,7 +14,6 @@ linters:
    - errname
    - errorlint
    - exhaustive
-   - exportloopref
    - gochecknoinits
    - gocritic
    - gofmt
