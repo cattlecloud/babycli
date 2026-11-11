@@ -17,6 +17,15 @@ var helpFlag = &Flag{
 	Help:    "print help message",
 }
 
+var versionFlag = &Flag{
+	Type:    BooleanFlag,
+	Require: false,
+	Repeats: false,
+	Long:    "version",
+	Short:   "v",
+	Help:    "print version",
+}
+
 const (
 	tab = "  "
 )

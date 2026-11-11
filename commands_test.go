@@ -4,6 +4,7 @@
 package babycli
 
 import (
+	"bytes"
 	"fmt"
 	"strconv"
 	"strings"
@@ -450,6 +451,75 @@ func TestHelp_top(t *testing.T) {
 
 	code := c.Run()
 	must.Eq(t, Failure, code)
+}
+
+func TestRun_version(t *testing.T) {
+	t.Parallel()
+
+	cases := []struct {
+		name    string
+		args    []string
+		top     *Component
+		version string
+		expText string
+	}{
+		{
+			name:    "long flag",
+			args:    []string{"--version"},
+			top:     &Component{Name: "myapp"},
+			version: "v1.2.3",
+			expText: "myapp v1.2.3\n",
+		},
+		{
+			name:    "short flag",
+			args:    []string{"-v"},
+			top:     &Component{Name: "myapp"},
+			version: "v1.2.3",
+			expText: "myapp v1.2.3\n",
+		},
+		{
+			name:    "empty version",
+			args:    []string{"--version"},
+			top:     &Component{Name: "myapp"},
+			version: "",
+			expText: "myapp\n",
+		},
+		{
+			name:    "empty name",
+			args:    []string{"--version"},
+			top:     &Component{},
+			version: "v1.2.3",
+			expText: "v1.2.3\n",
+		},
+		{
+			name: "subcommand",
+			args: []string{"sub", "--version"},
+			top: &Component{
+				Name: "myapp",
+				Components: Components{
+					{Name: "sub"},
+				},
+			},
+			version: "v1.2.3",
+			expText: "myapp v1.2.3\n",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			buf := new(bytes.Buffer)
+			config := &Configuration{
+				Arguments: tc.args,
+				Top:       tc.top,
+				Version:   tc.version,
+				Output:    buf,
+			}
+			c := New(config)
+			result := c.Run()
+			must.Eq(t, Success, result)
+			must.Eq(t, tc.expText, buf.String())
+		})
+	}
 }
 
 func TestComponent_GetString(t *testing.T) {
