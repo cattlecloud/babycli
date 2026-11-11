@@ -9,6 +9,7 @@ import (
 	"math"
 	"os"
 	"slices"
+	"strings"
 
 	"cattlecloud.net/go/stacks"
 )
@@ -46,6 +47,7 @@ func New(c *Configuration) *Runnable {
 	slices.Reverse(arguments)
 	c.Top.args = stacks.Simple(arguments...)
 	c.Top.version = c.Version
+	c.Top.vstring = c.vstring()
 	c.Top.globals = c.globals()
 	c.Top.context = c.context()
 	output := c.Output
@@ -66,7 +68,20 @@ func (c *Configuration) context() context.Context {
 }
 
 func (c *Configuration) globals() Flags {
-	return append(c.Globals, helpFlag)
+	return append(c.Globals, helpFlag, versionFlag)
+}
+
+func (c *Configuration) vstring() string {
+	name := strings.TrimSpace(c.Top.Name)
+	version := strings.TrimSpace(c.Version)
+	switch {
+	case version == "":
+		return name
+	case name == "":
+		return version
+	default:
+		return name + " " + version
+	}
 }
 
 type Runnable struct {

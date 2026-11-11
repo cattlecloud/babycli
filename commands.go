@@ -39,9 +39,9 @@ func (v *values) durationCount(flag string) int {
 	return len(v.durations[flag])
 }
 
-func (v *values) helpSet() bool {
+func (v *values) boolSet(long, short string) bool {
 	for k, bs := range v.bools {
-		if k == "help" || k == "h" {
+		if k == long || k == short {
 			for _, b := range bs {
 				if b {
 					return true
@@ -93,6 +93,8 @@ type Component struct {
 
 	version string
 
+	vstring string
+
 	context context.Context
 }
 
@@ -143,9 +145,14 @@ func (c *Component) run(output io.Writer) *result {
 		}
 	}
 
-	if c.vals.helpSet() {
+	if c.vals.boolSet("help", "h") {
 		text := c.help()
 		write(output, text)
+		return &result{code: Success}
+	}
+
+	if c.vals.boolSet("version", "v") {
+		write(output, c.vstring)
 		return &result{code: Success}
 	}
 
@@ -170,6 +177,7 @@ func (c *Component) run(output io.Writer) *result {
 	cmd.args = c.args
 	cmd.vals = c.vals
 	cmd.globals = c.globals
+	cmd.vstring = c.vstring
 	cmd.context = c.context
 	return cmd.run(output)
 }
