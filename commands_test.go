@@ -1994,6 +1994,16 @@ func TestArguments_top(t *testing.T) {
 			args:    []string{"one", "two", "three"},
 			expText: "hello [one two three]",
 		},
+		{
+			name:    "terminator",
+			args:    []string{"--", "-1"},
+			expText: "hello [-1]",
+		},
+		{
+			name:    "terminator multiple",
+			args:    []string{"--", "-1", "-2"},
+			expText: "hello [-1 -2]",
+		},
 	}
 
 	for _, tc := range cases {
@@ -2046,6 +2056,11 @@ func TestArguments_child(t *testing.T) {
 			args:    []string{"child", "one", "two", "three"},
 			expText: "hi [one two three]",
 		},
+		{
+			name:    "terminator",
+			args:    []string{"child", "--", "-1"},
+			expText: "hi [-1]",
+		},
 	}
 
 	for _, tc := range cases {
@@ -2071,4 +2086,31 @@ func TestArguments_child(t *testing.T) {
 			must.Eq(t, Success, result)
 		})
 	}
+}
+
+func TestRun_flagTerminator(t *testing.T) {
+	t.Parallel()
+
+	var output string
+
+	config := &Configuration{
+		Arguments: []string{"--name", "bob", "--", "-1"},
+		Top: &Component{
+			Flags: Flags{
+				{
+					Type: StringFlag,
+					Long: "name",
+				},
+			},
+			Function: func(c *Component) Code {
+				output = fmt.Sprintf("%s %v", c.GetString("name"), c.Arguments())
+				return Success
+			},
+		},
+	}
+
+	c := New(config)
+	result := c.Run()
+	must.Eq(t, "bob [-1]", output)
+	must.Eq(t, Success, result)
 }

@@ -1,6 +1,6 @@
 module cattlecloud.net/go/babycli
 
-go 1.23
+go 1.27
 
 require (
 	cattlecloud.net/go/stacks v1.1.2
