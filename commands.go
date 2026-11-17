@@ -185,6 +185,11 @@ func (c *Component) run(output io.Writer) *result {
 func (c *Component) processFlags() bool {
 	arg := c.args.Peek()
 
+	if arg == "--" {
+		c.args.Pop()
+		return false
+	}
+
 	switch {
 	case strings.HasPrefix(arg, "--"):
 		c.consumeFlag()
@@ -247,11 +252,11 @@ func (c *Component) consumeBoolFlag(identity string) {
 	}
 
 	next := c.args.Peek()
-	switch {
-	case next == "true":
+	switch next {
+	case "true":
 		c.vals.bools[identity] = append(c.vals.bools[identity], true)
 		_ = c.args.Pop()
-	case next == "false":
+	case "false":
 		c.vals.bools[identity] = append(c.vals.bools[identity], false)
 		_ = c.args.Pop()
 	default:

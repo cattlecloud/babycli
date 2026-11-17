@@ -15,7 +15,7 @@ tidy:
 
 # run tests across source tree
 [group('build')]
-test:
+tests:
     go test -v -race -count=1 ./...
 
 # apply go vet command on source tree
@@ -31,7 +31,7 @@ lint: vet
 # locally install build dependencies
 [group('build')]
 init:
-    go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.62.2
+    go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0
 
 # show host system information
 [group('build')]
