@@ -1341,6 +1341,30 @@ func TestComponent_GetDurations(t *testing.T) {
 			},
 		},
 		{
+			name:    "repeated durations provided with default",
+			expText: "hello [1m0s 2m0s 3m0s]",
+			expCode: Success,
+			args:    []string{"--ttl", "1m", "--ttl", "2m", "--ttl", "3m"},
+			root: &Component{
+				Flags: Flags{
+					{
+						Type:    DurationFlag,
+						Long:    "ttl",
+						Repeats: true,
+						Require: true,
+						Default: &Default{
+							Value: 9 * time.Minute,
+						},
+					},
+				},
+				Function: func(c *Component) Code {
+					ttls := c.GetDurations("ttl")
+					output = fmt.Sprintf("hello %v", ttls)
+					return Success
+				},
+			},
+		},
+		{
 			name:    "repeated durations not provided no default not required",
 			expText: "hello []",
 			expCode: Success,
@@ -2092,6 +2116,36 @@ func TestGlobal_flag_duration(t *testing.T) {
 	result := c.Run()
 	must.Zero(t, result)
 	must.Eq(t, "ttl is 2m0s", output)
+}
+
+func TestGlobal_flag_durations(t *testing.T) {
+	t.Parallel()
+
+	var output string
+
+	config := &Configuration{
+		Top: &Component{
+			Function: func(c *Component) Code {
+				output = fmt.Sprintf("ttls are %v", c.GetDurations("ttl"))
+				return Success
+			},
+		},
+		Globals: Flags{
+			{
+				Type:    DurationFlag,
+				Long:    "ttl",
+				Repeats: true,
+				Default: &Default{
+					Value: 2 * time.Minute,
+				},
+			},
+		},
+	}
+
+	c := New(config)
+	result := c.Run()
+	must.Zero(t, result)
+	must.Eq(t, "ttls are [2m0s]", output)
 }
 
 func TestArguments_top(t *testing.T) {

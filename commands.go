@@ -400,8 +400,8 @@ func (c *Component) GetDuration(flag string) time.Duration {
 }
 
 func (c *Component) GetDurations(flag string) []time.Duration {
-	if n := c.vals.intCount(flag); n == 0 {
-		f := c.Flags.Get(flag)
+	if n := c.vals.durationCount(flag); n == 0 {
+		f := c.combine().Get(flag)
 		if f.Default != nil {
 			return []time.Duration{f.Default.Value.(time.Duration)}
 		}
