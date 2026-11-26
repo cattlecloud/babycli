@@ -156,6 +156,10 @@ func (c *Component) run(output io.Writer) *result {
 		return &result{code: Success}
 	}
 
+	if !c.checkRequired(output) {
+		return &result{code: Failure}
+	}
+
 	if c.Leaf() && c.Function != nil {
 		code := c.Function(c)
 		if code == Usability {
@@ -329,9 +333,6 @@ func (c *Component) GetString(flag string) string {
 		if f.Default != nil {
 			return f.Default.Value.(string)
 		}
-		if f.Require {
-			panicf("no value for string flag %q", flag)
-		}
 	case 1:
 		return c.vals.strings[flag][0]
 	default:
@@ -345,9 +346,6 @@ func (c *Component) GetStrings(flag string) []string {
 		f := c.combine().Get(flag)
 		if f.Default != nil {
 			return []string{f.Default.Value.(string)}
-		}
-		if f.Require {
-			panicf("no value for string flag %q", flag)
 		}
 	}
 	return slices.Clone(c.vals.strings[flag])
@@ -364,9 +362,6 @@ func (c *Component) GetInt(flag string) int {
 		if f.Default != nil {
 			return f.Default.Value.(int)
 		}
-		if f.Require {
-			panicf("no value for int flag %q", flag)
-		}
 	case 1:
 		return c.vals.ints[flag][0]
 	default:
@@ -380,9 +375,6 @@ func (c *Component) GetInts(flag string) []int {
 		f := c.combine().Get(flag)
 		if f.Default != nil {
 			return []int{f.Default.Value.(int)}
-		}
-		if f.Require {
-			panicf("no value for int flag %q", flag)
 		}
 	}
 	return slices.Clone(c.vals.ints[flag])
@@ -399,9 +391,6 @@ func (c *Component) GetDuration(flag string) time.Duration {
 		if f.Default != nil {
 			return f.Default.Value.(time.Duration)
 		}
-		if f.Require {
-			panicf("no value for duration flag %q", flag)
-		}
 	case 1:
 		return c.vals.durations[flag][0]
 	default:
@@ -415,9 +404,6 @@ func (c *Component) GetDurations(flag string) []time.Duration {
 		f := c.Flags.Get(flag)
 		if f.Default != nil {
 			return []time.Duration{f.Default.Value.(time.Duration)}
-		}
-		if f.Require {
-			panicf("no value for duration flag %q", flag)
 		}
 	}
 	return slices.Clone(c.vals.durations[flag])
@@ -434,9 +420,6 @@ func (c *Component) GetBool(flag string) bool {
 		if f.Default != nil {
 			return f.Default.Value.(bool)
 		}
-		if f.Require {
-			panicf("no value for boolean flag %q", flag)
-		}
 	case 1:
 		return c.vals.bools[flag][0]
 	default:
@@ -451,9 +434,35 @@ func (c *Component) GetBools(flag string) []bool {
 		if f.Default != nil {
 			return []bool{f.Default.Value.(bool)}
 		}
-		if f.Require {
-			panicf("no value for boolean flag %q", flag)
-		}
 	}
 	return slices.Clone(c.vals.bools[flag])
+}
+
+// checkRequired verifies every required flag has been given a value.
+// A required flag with a Default is considered satisfied. It writes a
+// message for each missing flag and returns false if any are missing.
+func (c *Component) checkRequired(output io.Writer) bool {
+	ok := true
+	for _, f := range c.Flags {
+		if !f.Require || f.Default != nil {
+			continue
+		}
+		id := f.Identity()
+		var present bool
+		switch f.Type {
+		case StringFlag:
+			present = c.HasString(id)
+		case IntFlag:
+			present = c.HasInt(id)
+		case BooleanFlag:
+			present = c.HasBool(id)
+		case DurationFlag:
+			present = c.HasDuration(id)
+		}
+		if !present {
+			writef(output, "babycli: flag %q is required", id)
+			ok = false
+		}
+	}
+	return ok
 }
