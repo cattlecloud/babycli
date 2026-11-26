@@ -599,7 +599,7 @@ func TestComponent_GetString(t *testing.T) {
 			name:     "required string not provided no default",
 			expText:  "",
 			expCode:  Failure,
-			expPanic: `babycli: no value for string flag "name"`,
+			expPanic: `babycli: flag "name" is required`,
 			args:     nil,
 			root: &Component{
 				Flags: Flags{
@@ -717,7 +717,7 @@ func TestComponent_GetString(t *testing.T) {
 			result := c.Run()
 			must.Eq(t, tc.expText, output)
 			must.Eq(t, tc.expCode, result)
-			must.Eq(t, tc.expPanic, failure.String())
+			must.Eq(t, tc.expPanic, strings.TrimSpace(failure.String()))
 		})
 	}
 }
@@ -775,7 +775,7 @@ func TestComponent_GetStrings(t *testing.T) {
 			name:     "repeated strings not provided no default required",
 			expText:  "",
 			expCode:  Failure,
-			expPanic: `babycli: no value for string flag "name"`,
+			expPanic: `babycli: flag "name" is required`,
 			args:     nil,
 			root: &Component{
 				Flags: Flags{
@@ -833,7 +833,7 @@ func TestComponent_GetStrings(t *testing.T) {
 			result := c.Run()
 			must.Eq(t, tc.expText, output)
 			must.Eq(t, tc.expCode, result)
-			must.Eq(t, tc.expPanic, failure.String())
+			must.Eq(t, tc.expPanic, strings.TrimSpace(failure.String()))
 		})
 	}
 }
@@ -915,7 +915,7 @@ func TestComponent_GetInt(t *testing.T) {
 			name:     "required int not provided no default",
 			expText:  "",
 			expCode:  Failure,
-			expPanic: `babycli: no value for int flag "age"`,
+			expPanic: `babycli: flag "age" is required`,
 			args:     nil,
 			root: &Component{
 				Flags: Flags{
@@ -1012,7 +1012,7 @@ func TestComponent_GetInt(t *testing.T) {
 			result := c.Run()
 			must.Eq(t, tc.expText, output)
 			must.Eq(t, tc.expCode, result)
-			must.Eq(t, tc.expPanic, failure.String())
+			must.Eq(t, tc.expPanic, strings.TrimSpace(failure.String()))
 		})
 	}
 }
@@ -1070,7 +1070,7 @@ func TestComponent_GetInts(t *testing.T) {
 			name:     "repeated ints not provided no default required",
 			expText:  "",
 			expCode:  Failure,
-			expPanic: `babycli: no value for int flag "age"`,
+			expPanic: `babycli: flag "age" is required`,
 			args:     nil,
 			root: &Component{
 				Flags: Flags{
@@ -1128,7 +1128,7 @@ func TestComponent_GetInts(t *testing.T) {
 			result := c.Run()
 			must.Eq(t, tc.expText, output)
 			must.Eq(t, tc.expCode, result)
-			must.Eq(t, tc.expPanic, failure.String())
+			must.Eq(t, tc.expPanic, strings.TrimSpace(failure.String()))
 		})
 	}
 }
@@ -1210,7 +1210,7 @@ func TestComponent_GetDuration(t *testing.T) {
 			name:     "required duration not provided no default",
 			expText:  "",
 			expCode:  Failure,
-			expPanic: `babycli: no value for duration flag "ttl"`,
+			expPanic: `babycli: flag "ttl" is required`,
 			args:     nil,
 			root: &Component{
 				Flags: Flags{
@@ -1307,7 +1307,7 @@ func TestComponent_GetDuration(t *testing.T) {
 			result := c.Run()
 			must.Eq(t, tc.expText, output)
 			must.Eq(t, tc.expCode, result)
-			must.Eq(t, tc.expPanic, failure.String())
+			must.Eq(t, tc.expPanic, strings.TrimSpace(failure.String()))
 		})
 	}
 }
@@ -1365,7 +1365,7 @@ func TestComponent_GetDurations(t *testing.T) {
 			name:     "repeated durations not provided no default required",
 			expText:  "",
 			expCode:  Failure,
-			expPanic: `babycli: no value for duration flag "ttl"`,
+			expPanic: `babycli: flag "ttl" is required`,
 			args:     nil,
 			root: &Component{
 				Flags: Flags{
@@ -1423,7 +1423,7 @@ func TestComponent_GetDurations(t *testing.T) {
 			result := c.Run()
 			must.Eq(t, tc.expText, output)
 			must.Eq(t, tc.expCode, result)
-			must.Eq(t, tc.expPanic, failure.String())
+			must.Eq(t, tc.expPanic, strings.TrimSpace(failure.String()))
 		})
 	}
 }
@@ -1545,7 +1545,7 @@ func TestComponent_GetBoolean(t *testing.T) {
 			name:     "required boolean not provided no default",
 			expText:  "",
 			expCode:  Failure,
-			expPanic: `babycli: no value for boolean flag "verbose"`,
+			expPanic: `babycli: flag "verbose" is required`,
 			args:     nil,
 			root: &Component{
 				Flags: Flags{
@@ -1684,7 +1684,7 @@ func TestComponent_GetBoolean(t *testing.T) {
 			result := c.Run()
 			must.Eq(t, tc.expText, output)
 			must.Eq(t, tc.expCode, result)
-			must.Eq(t, tc.expPanic, failure.String())
+			must.Eq(t, tc.expPanic, strings.TrimSpace(failure.String()))
 		})
 	}
 }
@@ -1742,7 +1742,7 @@ func TestComponent_GetBooleans(t *testing.T) {
 			name:     "repeated booleans not provided no default required",
 			expText:  "",
 			expCode:  Failure,
-			expPanic: `babycli: no value for boolean flag "verbose"`,
+			expPanic: `babycli: flag "verbose" is required`,
 			args:     nil,
 			root: &Component{
 				Flags: Flags{
@@ -1800,9 +1800,139 @@ func TestComponent_GetBooleans(t *testing.T) {
 			result := c.Run()
 			must.Eq(t, tc.expText, output)
 			must.Eq(t, tc.expCode, result)
-			must.Eq(t, tc.expPanic, failure.String())
+			must.Eq(t, tc.expPanic, strings.TrimSpace(failure.String()))
 		})
 	}
+}
+
+func TestComponent_required(t *testing.T) {
+	t.Parallel()
+
+	var output string
+	var failure *strings.Builder
+
+	cases := []struct {
+		name    string
+		args    []string
+		flags   Flags
+		expText string
+		expCode Code
+		expErr  string
+	}{
+		{
+			name:    "required string missing",
+			args:    nil,
+			flags:   Flags{{Type: StringFlag, Long: "name", Require: true}},
+			expText: "",
+			expCode: Failure,
+			expErr:  `babycli: flag "name" is required`,
+		},
+		{
+			name:    "required string provided",
+			args:    []string{"--name", "bob"},
+			flags:   Flags{{Type: StringFlag, Long: "name", Require: true}},
+			expText: "hello bob",
+			expCode: Success,
+		},
+		{
+			name: "required string with default",
+			args: nil,
+			flags: Flags{
+				{
+					Type:    StringFlag,
+					Long:    "name",
+					Require: true,
+					Default: &Default{Value: "alice"},
+				},
+			},
+			expText: "hello alice",
+			expCode: Success,
+		},
+		{
+			name: "multiple required missing",
+			args: nil,
+			flags: Flags{
+				{Type: StringFlag, Long: "name", Require: true},
+				{Type: IntFlag, Long: "age", Require: true},
+			},
+			expText: "",
+			expCode: Failure,
+			expErr:  "babycli: flag \"name\" is required\nbabycli: flag \"age\" is required",
+		},
+	}
+
+	for _, tc := range cases {
+		output = ""                    // reset for each case
+		failure = new(strings.Builder) // reset for each case
+
+		t.Run(tc.name, func(t *testing.T) {
+			config := &Configuration{
+				Arguments: tc.args,
+				Top: &Component{
+					Flags: tc.flags,
+					Function: func(c *Component) Code {
+						output = "hello " + c.GetString("name")
+						return Success
+					},
+				},
+				Output: failure,
+			}
+			c := New(config)
+			result := c.Run()
+			must.Eq(t, tc.expText, output)
+			must.Eq(t, tc.expCode, result)
+			must.Eq(t, tc.expErr, strings.TrimSpace(failure.String()))
+		})
+	}
+}
+
+func TestComponent_required_help(t *testing.T) {
+	t.Parallel()
+
+	var output string
+
+	config := &Configuration{
+		Arguments: []string{"--help"},
+		Top: &Component{
+			Flags: Flags{
+				{Type: StringFlag, Long: "name", Require: true},
+			},
+			Function: func(_ *Component) Code {
+				output = "ran"
+				return Success
+			},
+		},
+		Output: new(bytes.Buffer),
+	}
+	c := New(config)
+	result := c.Run()
+	must.Eq(t, Success, result)
+	must.Eq(t, "", output)
+}
+
+func TestComponent_required_version(t *testing.T) {
+	t.Parallel()
+
+	var output string
+
+	config := &Configuration{
+		Arguments: []string{"--version"},
+		Version:   "1.0",
+		Top: &Component{
+			Flags: Flags{
+				{Type: StringFlag, Long: "name", Require: true},
+			},
+			Function: func(_ *Component) Code {
+				output = "ran"
+				return Success
+			},
+		},
+		Output: new(bytes.Buffer),
+	}
+	c := New(config)
+	result := c.Run()
+	must.Eq(t, Success, result)
+	must.Eq(t, "", output)
 }
 
 func TestComponent_maybeSplit(t *testing.T) {
